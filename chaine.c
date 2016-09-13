@@ -12,7 +12,7 @@ struct chaine {
 
 chaine chaine_creer_vide()
 {
-  chaine c = (chaine) malloc(sizeof(chaine));
+  chaine c = (chaine) malloc(sizeof(struct chaine));
   c->taille = 0;
   c->tab = NULL;
   return c;
@@ -20,13 +20,12 @@ chaine chaine_creer_vide()
 
 chaine chaine_creer_char(char* c)
 {
-  chaine ch = (chaine) malloc(sizeof(chaine));
+  chaine ch = (chaine) malloc(sizeof(struct chaine));
   ch->taille = strlen(c);
   /* Je copie en mémoire la chaine donnée car je ne sais pas quand
   il va la libérer */
-  char* tab = (char*) malloc(sizeof(char) * (ch->taille + 1)); // +1 pour le caractère NULL
-  strcpy(tab, c); // Copie aussi le caractère NULL
-  ch->tab = tab;
+  ch->tab = (char*) malloc(sizeof(char) * (ch->taille + 1)); // +1 pour le caractère NULL
+  strcpy(ch->tab, c); // Copie aussi le caractère NULL
   return ch;
 }
 
@@ -62,8 +61,12 @@ bool chaine_est_egal(chaine ch1, chaine ch2)
   return (!strcmp(ch1->tab, ch2->tab));
 }
 
+// TODO ici si ch1 n'est pas assez grand il y a une erreur mémoire
 void chaine_concatener(chaine ch1, chaine ch2)
 {
+  if (ch1->tab == NULL) {
+    ch1->tab = (char*) malloc(sizeof(char) * (ch2->taille + 1)); // +1 pour caractère NULL
+  }
   strcat(ch1->tab, ch2->tab);
 }
 
@@ -79,11 +82,10 @@ void chaine_modifier_char_i(chaine ch, const unsigned int i, const char c)
 
 chaine chaine_copier(chaine ch1)
 {
-  chaine c = malloc(sizeof(chaine));
+  chaine c = malloc(sizeof(struct chaine));
   c->taille = ch1->taille;
-  char* tab = malloc(sizeof(char) * (c->taille + 1)); // +1 pour le caractère NULL
-  strcpy(tab, ch1->tab);
-  c->tab = tab;
+  c->tab= (char*) malloc(sizeof(char) * (c->taille + 1)); // +1 pour le caractère NULL
+  strcpy(c->tab, ch1->tab);
   return c;
 }
 
@@ -92,6 +94,7 @@ void chaine_en_minuscules(chaine ch)
   char* p_c = ch->tab;
   while (*p_c) {
     *p_c = tolower(*p_c);
+    p_c++;
   }
 }
 
@@ -100,6 +103,7 @@ void chaine_en_majuscules(chaine ch)
   char* p_c = ch->tab;
   while (*p_c) {
     *p_c = toupper(*p_c);
+    p_c++;
   }
 }
 
@@ -112,6 +116,12 @@ bool chaine_appartenir(const char c, chaine ch, int* i)
 
 chaine chaine_lire(FILE* f, unsigned int taille)
 {
-  // TODO chaine-lire
-  //fscanf(f, "%" + itoa(taille) + "s"));
+  chaine ch = (chaine) malloc(sizeof(struct chaine));
+  ch->taille = taille;
+  ch->tab = (char*) malloc(sizeof(char) * (taille + 1)); //+1 pour le caractère NULL
+  for (size_t i = 0; i < taille; i++) {
+    ch->tab[i] = fgetc(f);
+  }
+  ch->tab[taille + 1] = 0;
+  return ch;
 }

@@ -9,7 +9,6 @@
 #define SIZE 15
 
 int main (void ) {
-
   FILE* f_in = fopen("test_chaines_in.txt","r");
   FILE* f_out = fopen("test_chaines_out.txt","w");
   char a_lire[SIZE];

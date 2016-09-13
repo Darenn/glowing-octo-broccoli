@@ -1,1 +1,7 @@
-ch1=ch2=ch2 corrigé=ch3=ch3=ch3 modifié=ch4=
+ch1=vacances
+ch2=etidiante
+ch2 corrigé=etudiante
+ch3=etudiante
+ch3=ETUDIANTE
+ch3 modifié=ETUDIANTEvacances
+ch4=etudiante
