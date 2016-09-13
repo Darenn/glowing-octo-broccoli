@@ -12,7 +12,7 @@ struct chaine {
 
 chaine chaine_creer_vide()
 {
-  chaine c = malloc(sizeof(chaine));
+  chaine c = (chaine) malloc(sizeof(chaine));
   c->taille = 0;
   c->tab = NULL;
   return c;
@@ -20,11 +20,11 @@ chaine chaine_creer_vide()
 
 chaine chaine_creer_char(char* c)
 {
-  chaine ch = malloc(sizeof(chaine));
+  chaine ch = (chaine) malloc(sizeof(chaine));
   ch->taille = strlen(c);
   /* Je copie en mémoire la chaine donnée car je ne sais pas quand
   il va la libérer */
-  char* tab = malloc (sizeof(char) * (ch->taille + 1)); // +1 pour le caractère NULL
+  char* tab = (char*) malloc(sizeof(char) * (ch->taille + 1)); // +1 pour le caractère NULL
   strcpy(tab, c); // Copie aussi le caractère NULL
   ch->tab = tab;
   return ch;
@@ -32,19 +32,18 @@ chaine chaine_creer_char(char* c)
 
 void chaine_detruire(chaine* ch)
 {
-  // TODO
-  //free(ch->tab); // Libére le tableau ? Je ne comprends pas pourquoi ça ne fonctionne pas
-  free(ch); // Libére la struct
+  free((*ch)->tab); // Libére le tableau
+  free(*ch); // Libére la struct
 }
 
 void chaine_afficher(FILE* f, chaine ch)
 {
   char* c = ch->tab;
-  while (*c != 0) {
-    printf("%c", *c);
+  while (*c) {
+    fprintf(f, "%c", *c);
     c++;
   }
-  printf("\n");
+  fprintf(f, "\n");
 }
 
 unsigned int chaine_extraire_taille(chaine ch)
@@ -84,21 +83,35 @@ chaine chaine_copier(chaine ch1)
   c->taille = ch1->taille;
   char* tab = malloc(sizeof(char) * (c->taille + 1)); // +1 pour le caractère NULL
   strcpy(tab, ch1->tab);
+  c->tab = tab;
   return c;
 }
 
 void chaine_en_minuscules(chaine ch)
 {
+  char* p_c = ch->tab;
+  while (*p_c) {
+    *p_c = tolower(*p_c);
+  }
 }
 
 void chaine_en_majuscules(chaine ch)
 {
+  char* p_c = ch->tab;
+  while (*p_c) {
+    *p_c = toupper(*p_c);
+  }
 }
 
 bool chaine_appartenir(const char c, chaine ch, int* i)
 {
+  char * p_c = strchr(ch->tab, c);
+  *i = (ch->tab - p_c);
+  return p_c != NULL;
 }
 
 chaine chaine_lire(FILE* f, unsigned int taille)
 {
+  // TODO chaine-lire
+  //fscanf(f, "%" + itoa(taille) + "s"));
 }
