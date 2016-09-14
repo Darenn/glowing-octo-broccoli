@@ -80,26 +80,20 @@ void motus_afficher(motus m, unsigned int numero, bool gagne)
 chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 {
   // Unification des characteres
-  chaine_en_minuscules(ch);
-  chaine_en_minuscules(mot);
-
-  // Creation de la chaine code
-  chaine code = chaine_copier(mot); // Même taille que le mot a trouver
-  for (unsigned int i = 0; i < chaine_extraire_taille(code); i++) {
-    chaine_modifier_char_i(code, i, CHAR_EN_ATTENTE);
-  }
+  chaine_en_majuscules(ch);
+  chaine_en_majuscules(mot);
 
   // Variables
   int j;  // Indice du charactere si trouvé
   char c; // Charactere courant
+  chaine code = chaine_copier(ch); // Creation de la chaine code
 
   // On parcourt toute la chaine proposé
   for (unsigned int i = 0; i < chaine_extraire_taille(ch); i++) {
     c = chaine_extraire_char_i(ch, i); // Recuperation du charactere courant
 
     if (chaine_appartenir(c, mot, &j)) { // Si le charactere appartient au mot
-      if (j == i) { // Si il est bien placé
-        // TODO: correction conparaison entre int et uint
+      if ((unsigned)j == i) { // Si il est bien placé
         chaine_modifier_char_i(code, i, CHAR_BIEN_PLACE);
       } else { // Sinon
         chaine_modifier_char_i(code, i, CHAR_MAL_PLACE);
@@ -115,5 +109,15 @@ chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 
 void motus_jeu(motus m)
 {
+  bool gagne = false;
+  int numero = 0;
+  chaine pro;
 
+  while (((unsigned)++numero <= m->nb_essai) && !gagne) {
+    motus_afficher(m, numero, gagne);
+    pro = chaine_lire(stdin, m->t_mot);
+    chaine_concatener(m->propositions, pro);
+    chaine_concatener(m->resultats, chaine_code(pro, m->mot, &gagne));
+  }
+  motus_afficher(m, numero, gagne);
 }
