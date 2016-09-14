@@ -61,20 +61,22 @@ bool chaine_est_egal(chaine ch1, chaine ch2)
   return (!strcmp(ch1->tab, ch2->tab));
 }
 
-// TODO ici si ch1 n'est pas assez grand il y a une erreur mémoire
 void chaine_concatener(chaine ch1, chaine ch2)
 {
-  if (ch1->tab == NULL) {
-    ch1->tab = (char*) malloc(sizeof(char) * (ch2->taille + 1)); // +1 pour caractère NULL
-    ch1->tab[0] = 0;
+  // Si la ch2 est vide on ne concatène pas
+  if (ch2->tab == NULL) { return; }
+  // J'alloue un nouveauTab avec assez de place pour les deux chaines
+  char* nouveauTab = (char*) malloc(sizeof(char) * (ch1->taille + ch2->taille + 1));
+  // Si ch1 n'est pas vide, je copie son contenu dans mon nouveauTab
+  if (ch1->tab != NULL) {
+    strcpy(nouveauTab, ch1->tab);
+  } else { // sinon je mets le caractère NULL au début de la chaine (pour strcat)
+    nouveauTab[0] = 0;
   }
-  char* tampon = (char*) malloc(sizeof(char) * (ch1->taille + 1));
-  strcpy(tampon, ch1->tab);
   // J'alloue à nouveau le tableau de ch1 pour qu'il ait la bonne taille
   free(ch1->tab);
-  ch1->tab = (char *) malloc(sizeof(char) * (ch1->taille + ch2->taille + 1));
   ch1->taille += ch2->taille;
-  ch1->tab = tampon;
+  ch1->tab = nouveauTab;
   strcat(ch1->tab, ch2->tab);
 }
 
