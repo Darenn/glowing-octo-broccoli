@@ -5,7 +5,7 @@
 #include "motus.h"
 #include "chaine.h"
 
-struct motus {
+struct motus_motus {
   unsigned int t_mot; //taille des mots du jeu
   unsigned int nb_essai; // le nombre d'essais autorisés
   // t_mot et nb_essai permettent de définir les conditions du jeu
@@ -17,18 +17,29 @@ struct motus {
 
 motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char* mot)
 {
-  // à écrire 
+  motus m = (motus) malloc(sizeof(motus));
+  m->t_mot = _t_mot;
+  m->nb_essai = _nb_essai;
+  m->mot = chaine_creer_char(mot);
+  m->propositions = chaine_creer_vide();
+  m->resultats = chaine_creer_vide();
+  return m;
 }
 
 void motus_detruire(motus* m)
 {
-  // à écrire
+  chaine_detruire(&(*m)->mot);
+  chaine_detruire(&(*m)->propositions);
+  chaine_detruire(&(*m)->resultats);
+  free(*m);
+  m = NULL;
+  return;
 }
 
 
 void motus_afficher(motus m, unsigned int numero, bool gagne)
 {
-  clrscr();   
+  clrscr();
   unsigned int taille = chaine_extraire_taille(m->propositions);
   unsigned int nb_resultats = taille / (m->t_mot);
   for (unsigned int i=0; i<nb_resultats; i++) {
@@ -55,20 +66,20 @@ void motus_afficher(motus m, unsigned int numero, bool gagne)
     fprintf(stdout,"\n");
   }
   for (unsigned int i=nb_resultats; i<m->nb_essai; i++) {
-    for (unsigned int j=0;  j<m->t_mot; j++) 
+    for (unsigned int j=0;  j<m->t_mot; j++)
       fprintf(stdout,CHAR_EN_ATTENTE);
     fprintf(stdout,"\n");
   }
   if ((numero-1 != m->nb_essai) && (!gagne))
-    fprintf(stdout,"Proposition numéro %d : ",numero);   
+    fprintf(stdout,"Proposition numéro %d : ",numero);
 }
 
 chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 {
-  //à écrire
+  return ch;
 }
 
 void motus_jeu(motus m)
 {
-  // à écrire
+  return m;
 }

@@ -23,6 +23,6 @@ void motus_afficher(motus m, unsigned int numero, bool gagne);
 // cf exemples dans l'énoncé.
 chaine chaine_code(chaine ch, chaine mot, bool* gagne);
 // Déroulement du jeu
-void motus_jeu(motus m)
-  
+void motus_jeu(motus m);
+
 #endif

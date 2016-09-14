@@ -29,8 +29,8 @@ int main (int argc, char** argv) {
   m = motus_creer(taille,nb_essai,ref);
   motus_jeu(m);
 
-  motus_detruire(m);
-  
+  motus_detruire(&m);
+
 
   return 0 ;
 }
