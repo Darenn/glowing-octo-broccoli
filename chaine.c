@@ -129,9 +129,12 @@ chaine chaine_lire(FILE* f, unsigned int taille)
   chaine ch = (chaine) malloc(sizeof(struct chaine));
   ch->taille = taille;
   ch->tab = (char*) malloc(sizeof(char) * (taille + 1)); //+1 pour le caractère NULL
+  fread(ch->tab, sizeof(char), taille, f);
+  /*
   for (size_t i = 0; i < taille; i++) {
     ch->tab[i] = fgetc(f);
   }
+  */
   ch->tab[taille + 1] = 0;
   return ch;
 }
