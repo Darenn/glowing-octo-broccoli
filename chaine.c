@@ -24,8 +24,10 @@ chaine chaine_creer_char(char* c)
   ch->taille = strlen(c);
   /* Je copie en mémoire la chaine donnée car je ne sais pas quand
   il va la libérer */
-  ch->tab = (char*) malloc(sizeof(char) * (ch->taille + 1)); // +1 pour le caractère NULL
-  strcpy(ch->tab, c); // Copie aussi le caractère NULL
+  ch->tab = (char*) malloc(sizeof(char) * (ch->taille));
+  for (size_t i = 0; i < ch->taille; i++) {
+    ch->tab[i] = c[i];
+  }
   return ch;
 }
 
@@ -37,10 +39,8 @@ void chaine_detruire(chaine* ch)
 
 void chaine_afficher(FILE* f, chaine ch)
 {
-  char* c = ch->tab;
-  while (*c) {
-    fprintf(f, "%c", *c);
-    c++;
+  for (size_t i = 0; i < ch->taille; i++) {
+    fprintf(f, "%c", ch->tab[i]);
   }
   fprintf(f, "\n");
 }
@@ -58,7 +58,16 @@ bool chaine_est_vide(chaine ch)
 
 bool chaine_est_egal(chaine ch1, chaine ch2)
 {
-  return (!strcmp(ch1->tab, ch2->tab));
+  if (ch1->taille != ch2->taille) {
+    return false;
+  } else {
+    for (size_t i = 0; i < ch1->taille; i++) {
+      if(ch1->tab[i] != ch2->tab[i]) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
 
 void chaine_concatener(chaine ch1, chaine ch2)
@@ -66,18 +75,22 @@ void chaine_concatener(chaine ch1, chaine ch2)
   // Si la ch2 est vide on ne concatène pas
   if (ch2->tab == NULL) { return; }
   // J'alloue un nouveauTab avec assez de place pour les deux chaines
-  char* nouveauTab = (char*) malloc(sizeof(char) * (ch1->taille + ch2->taille + 1));
+  char* nouveauTab = (char*) malloc(sizeof(char) * (ch1->taille + ch2->taille));
   // Si ch1 n'est pas vide, je copie son contenu dans mon nouveauTab
   if (ch1->tab != NULL) {
-    strcpy(nouveauTab, ch1->tab);
-  } else { // sinon je mets le caractère NULL au début de la chaine (pour strcat)
-    nouveauTab[0] = 0;
+    for (size_t i = 0; i < ch1->taille; i++) {
+      nouveauTab[i] = ch1->tab[i];
+    }
+  }
+  if (ch2->tab != NULL) {
+    for (size_t i = 0; i < ch2->taille; i++) {
+      nouveauTab[ch1->taille + i] = ch2->tab[i];
+    }
   }
   // J'alloue à nouveau le tableau de ch1 pour qu'il ait la bonne taille
   free(ch1->tab);
   ch1->taille += ch2->taille;
   ch1->tab = nouveauTab;
-  strcat(ch1->tab, ch2->tab);
 }
 
 char chaine_extraire_char_i(chaine ch, const unsigned int i)
@@ -94,47 +107,43 @@ chaine chaine_copier(chaine ch1)
 {
   chaine c = malloc(sizeof(struct chaine));
   c->taille = ch1->taille;
-  c->tab= (char*) malloc(sizeof(char) * (c->taille + 1)); // +1 pour le caractère NULL
-  strcpy(c->tab, ch1->tab);
+  c->tab= (char*) malloc(sizeof(char) * ch1->taille);
+    for (size_t i = 0; i < ch1->taille; i++) {
+      c->tab[i] = ch1->tab[i];
+    }
   return c;
 }
 
 void chaine_en_minuscules(chaine ch)
 {
-  char* p_c = ch->tab;
-  while (*p_c) {
-    *p_c = tolower(*p_c);
-    p_c++;
+  for (size_t i = 0; i < ch->taille; i++) {
+    ch->tab[i] = tolower(ch->tab[i]);
   }
 }
 
 void chaine_en_majuscules(chaine ch)
 {
-  char* p_c = ch->tab;
-  while (*p_c) {
-    *p_c = toupper(*p_c);
-    p_c++;
+  for (size_t i = 0; i < ch->taille; i++) {
+    ch->tab[i] = toupper(ch->tab[i]);
   }
 }
 
 bool chaine_appartenir(const char c, chaine ch, int* i)
 {
-  char * p_c = strchr(ch->tab, c);
-  *i = (p_c - ch->tab);
-  return p_c != NULL;
+  for (size_t j = 0; j < ch->taille; j++) {
+    if (ch->tab[j] == c) {
+      *i = j;
+      return true;
+    }
+  }
+  return false;
 }
 
 chaine chaine_lire(FILE* f, unsigned int taille)
 {
   chaine ch = (chaine) malloc(sizeof(struct chaine));
   ch->taille = taille;
-  ch->tab = (char*) malloc(sizeof(char) * (taille + 1)); //+1 pour le caractère NULL
+  ch->tab = (char*) malloc(sizeof(char) * taille);
   fread(ch->tab, sizeof(char), taille, f);
-  /*
-  for (size_t i = 0; i < taille; i++) {
-    ch->tab[i] = fgetc(f);
-  }
-  */
-  ch->tab[taille + 1] = 0;
   return ch;
 }
