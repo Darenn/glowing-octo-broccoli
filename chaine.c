@@ -35,6 +35,7 @@ void chaine_detruire(chaine* ch)
 {
   free((*ch)->tab); // Libére le tableau
   free(*ch); // Libére la struct
+  *ch = NULL; // On met le pointeur de l'utilisateur à NULL
 }
 
 void chaine_afficher(FILE* f, chaine ch)
