@@ -43,6 +43,7 @@ void chaine_en_minuscules(chaine ch);
 void chaine_en_majuscules(chaine ch);
 
 // Renvoie vrai si la chaîne ch contient le caractère c et i donne en plus la position de c dans ch
+// [Rajout personnel] On peut mettre i à NULL si on pas besoin de l'indice de caractère
 bool chaine_appartenir(const char c, chaine ch, int* i);
 
 // Renvoie une chaîne par lecture de "taille" caractères sur un fichier au sens Unix (par exemple stdin)

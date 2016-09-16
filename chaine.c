@@ -74,21 +74,22 @@ bool chaine_est_egal(chaine ch1, chaine ch2)
 void chaine_concatener(chaine ch1, chaine ch2)
 {
   // Si la ch2 est vide on ne concatène pas
-  if (ch2->tab == NULL) { return; }
+  if (chaine_est_vide(ch2)) { return; }
   // J'alloue un nouveauTab avec assez de place pour les deux chaines
   char* nouveauTab = (char*) malloc(sizeof(char) * (ch1->taille + ch2->taille));
   // Si ch1 n'est pas vide, je copie son contenu dans mon nouveauTab
-  if (ch1->tab != NULL) {
+  if (!chaine_est_vide(ch1)) {
     for (size_t i = 0; i < ch1->taille; i++) {
       nouveauTab[i] = ch1->tab[i];
     }
   }
-  if (ch2->tab != NULL) {
+  // Je rajoute les caractères de ch2 au bout de mon nouveaTab
+  if (!chaine_est_vide(ch2)) {
     for (size_t i = 0; i < ch2->taille; i++) {
       nouveauTab[ch1->taille + i] = ch2->tab[i];
     }
   }
-  // J'alloue à nouveau le tableau de ch1 pour qu'il ait la bonne taille
+  // Je libère l'ancien tab de ch1, et je fais pointer tab vers nouveauTab
   free(ch1->tab);
   ch1->taille += ch2->taille;
   ch1->tab = nouveauTab;
@@ -133,7 +134,9 @@ bool chaine_appartenir(const char c, chaine ch, int* i)
 {
   for (size_t j = 0; j < ch->taille; j++) {
     if (ch->tab[j] == c) {
-      *i = j;
+      if (i != NULL) {
+        *i = j;
+      }
       return true;
     }
   }

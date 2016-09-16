@@ -17,7 +17,7 @@ struct motus_struct {
 
 motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char* mot)
 {
-  motus m = (motus) malloc(sizeof(struct motus_struct)); // Allocation memoire
+  motus m = (motus) malloc(sizeof(struct motus_struct)); // Allocation mémoire
   // INIT
   m->t_mot = _t_mot;
   m->nb_essai = _nb_essai;
@@ -30,7 +30,7 @@ motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char* mot)
 
 void motus_detruire(motus* m)
 {
-  // Destruction des trois chaîne
+  // Destruction des trois chaines
   chaine_detruire(&(*m)->mot);
   chaine_detruire(&(*m)->propositions);
   chaine_detruire(&(*m)->resultats);
@@ -84,15 +84,14 @@ chaine chaine_code(chaine ch, chaine mot, bool* gagne)
   chaine_en_majuscules(mot);
 
   // Variables
-  int j;  // Indice du caractère si trouvé
-  char c; // Caractère courant
+  char c;                          // Caractère courant
   chaine code = chaine_copier(ch); // Creation de la chaine code
 
   // On parcourt toute la chaine proposé
   for (unsigned int i = 0; i < chaine_extraire_taille(ch); i++) {
     c = chaine_extraire_char_i(ch, i); // Recuperation du caractère courant
 
-    if (chaine_appartenir(c, mot, &j)) { // Si le caractère appartient au mot
+    if (chaine_appartenir(c, mot, NULL)) { // Si le caractère appartient au mot
       if (chaine_extraire_char_i(mot, i) == c) { // Si il est bien placé
         chaine_modifier_char_i(code, i, CHAR_BIEN_PLACE);
       } else { // Sinon
@@ -109,19 +108,20 @@ chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 
 void motus_jeu(motus m)
 {
+  // Variables
   bool gagne = false;
-  unsigned int numero = 0;
-  chaine pro;
-  chaine code;
-  char c;
+  unsigned int numero = 0; // Essai courant
+  chaine pro;              // Proposition du joueur
+  chaine code;             // Code de test
+  char c;                  // Permet la suppression des caractères restant dans stdin
 
-  while ((++numero <= m->nb_essai) && !gagne) {
-    motus_afficher(m, numero, gagne);
+  while ((++numero <= m->nb_essai) && !gagne) { // Tant qu'il reste des essai et que le joueur n'a pas gagné
+    motus_afficher(m, numero, gagne);           // On affiche le jeu
 
-    pro = chaine_lire(stdin, m->t_mot);      // Lecture
-    while (c = fgetc(stdin), c != '\n');     // Suppression des caractères supplémentaires (ex: '/n')
-    code = chaine_code(pro, m->mot, &gagne); // Création du code
-    // Concatenations
+    pro = chaine_lire(stdin, m->t_mot);         // Lecture de la proposition
+    while (c = fgetc(stdin), c != '\n');        // Suppression des caractères supplémentaires (ex: '/n')
+    code = chaine_code(pro, m->mot, &gagne);    // Création du code
+    // Ajout de la proposition et du code
     chaine_concatener(m->propositions, pro);
     chaine_concatener(m->resultats, code);
     // Destruction
