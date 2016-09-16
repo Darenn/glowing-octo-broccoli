@@ -11,7 +11,7 @@
 #define clrscr() printf("\033[H\033[2J")
 #define couleur(param) printf("\033[%sm",param)
 
-typedef struct motus_motus* motus;
+typedef struct motus_struct* motus;
 
 // Pour créer le jeu
 motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char* mot);

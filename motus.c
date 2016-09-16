@@ -5,7 +5,7 @@
 #include "motus.h"
 #include "chaine.h"
 
-struct motus_motus {
+struct motus_struct {
   unsigned int t_mot; //taille des mots du jeu
   unsigned int nb_essai; // le nombre d'essais autorisés
   // t_mot et nb_essai permettent de définir les conditions du jeu
@@ -17,7 +17,7 @@ struct motus_motus {
 
 motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char* mot)
 {
-  motus m = (motus) malloc(sizeof(struct motus_motus)); // Allocation memoire
+  motus m = (motus) malloc(sizeof(struct motus_struct)); // Allocation memoire
   // INIT
   m->t_mot = _t_mot;
   m->nb_essai = _nb_essai;
@@ -85,7 +85,7 @@ chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 
   // Variables
   int j;  // Indice du caractère si trouvé
-  char c; // Charactere courant
+  char c; // Caractère courant
   chaine code = chaine_copier(ch); // Creation de la chaine code
 
   // On parcourt toute la chaine proposé
@@ -93,7 +93,7 @@ chaine chaine_code(chaine ch, chaine mot, bool* gagne)
     c = chaine_extraire_char_i(ch, i); // Recuperation du caractère courant
 
     if (chaine_appartenir(c, mot, &j)) { // Si le caractère appartient au mot
-      if ((unsigned)j == i) { // Si il est bien placé
+      if (chaine_extraire_char_i(mot, i) == c) { // Si il est bien placé
         chaine_modifier_char_i(code, i, CHAR_BIEN_PLACE);
       } else { // Sinon
         chaine_modifier_char_i(code, i, CHAR_MAL_PLACE);
@@ -112,11 +112,11 @@ void motus_jeu(motus m)
   bool gagne = false;
   unsigned int numero = 0;
   chaine pro;
+  char c;
 
   while ((++numero <= m->nb_essai) && !gagne) {
     motus_afficher(m, numero, gagne);
     pro = chaine_lire(stdin, m->t_mot);
-    char c;
     while (c = fgetc(stdin), c != '\n'); // Suppression du caractère '/n'
     chaine_concatener(m->propositions, pro);
     chaine_concatener(m->resultats, chaine_code(pro, m->mot, &gagne));
