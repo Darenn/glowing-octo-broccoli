@@ -73,7 +73,7 @@ void chaine_concatener(chaine ch1, chaine ch2)
   } else { // sinon je mets le caractère NULL au début de la chaine (pour strcat)
     nouveauTab[0] = 0;
   }
-  // J'alloue à nouveau le tableau de ch1 pour qu'il ait la bonne taille
+  // Je remplace le tab de ch1 par le nouveauTab
   free(ch1->tab);
   ch1->taille += ch2->taille;
   ch1->tab = nouveauTab;
@@ -130,11 +130,6 @@ chaine chaine_lire(FILE* f, unsigned int taille)
   ch->taille = taille;
   ch->tab = (char*) malloc(sizeof(char) * (taille + 1)); //+1 pour le caractère NULL
   fread(ch->tab, sizeof(char), taille, f);
-  /*
-  for (size_t i = 0; i < taille; i++) {
-    ch->tab[i] = fgetc(f);
-  }
-  */
   ch->tab[taille + 1] = 0;
   return ch;
 }

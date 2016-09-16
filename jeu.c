@@ -26,7 +26,7 @@ int main (int argc, char** argv) {
   ref[strlen(ref)-1]='\0';
   fclose(f_in);
 
-  m = motus_creer(taille,nb_essai,ref);
+  m = motus_creer(taille,nb_essai,"patate");
   motus_jeu(m);
 
   motus_detruire(&m);

@@ -51,19 +51,19 @@ void motus_afficher(motus m, unsigned int numero, bool gagne)
       char c2 = chaine_extraire_char_i((m->resultats),i*m->t_mot+j);
       switch(c2) {
         case CHAR_BIEN_PLACE:
-        couleur("37");
-        fprintf(stdout,"%c",c1);
-        couleur("0");
-        break;
+          couleur("37");
+          fprintf(stdout,"%c",c1);
+          couleur("0");
+          break;
         case CHAR_MAL_PLACE:
-        couleur("34");
-        fprintf(stdout,"%c",c1);
-        couleur("0");
-        break;
+          couleur("34");
+          fprintf(stdout,"%c",c1);
+          couleur("0");
+          break;
         case CHAR_NON_PRESENT:
-        couleur("31");
-        fprintf(stdout,"%c",c1);
-        couleur("0");
+          couleur("31");
+          fprintf(stdout,"%c",c1);
+          couleur("0");
       }
     }
     fprintf(stdout,"\n");
@@ -79,26 +79,26 @@ void motus_afficher(motus m, unsigned int numero, bool gagne)
 
 chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 {
-  // Unification des characteres
+  // Unification des caractères
   chaine_en_majuscules(ch);
   chaine_en_majuscules(mot);
 
   // Variables
-  int j;  // Indice du charactere si trouvé
+  int j;  // Indice du caractère si trouvé
   char c; // Charactere courant
   chaine code = chaine_copier(ch); // Creation de la chaine code
 
   // On parcourt toute la chaine proposé
   for (unsigned int i = 0; i < chaine_extraire_taille(ch); i++) {
-    c = chaine_extraire_char_i(ch, i); // Recuperation du charactere courant
+    c = chaine_extraire_char_i(ch, i); // Recuperation du caractère courant
 
-    if (chaine_appartenir(c, mot, &j)) { // Si le charactere appartient au mot
+    if (chaine_appartenir(c, mot, &j)) { // Si le caractère appartient au mot
       if ((unsigned)j == i) { // Si il est bien placé
         chaine_modifier_char_i(code, i, CHAR_BIEN_PLACE);
       } else { // Sinon
         chaine_modifier_char_i(code, i, CHAR_MAL_PLACE);
       }
-    } else { // Si le charactere n'appartient pas au mot
+    } else { // Si le caractère n'appartient pas au mot
       chaine_modifier_char_i(code, i, CHAR_NON_PRESENT);
     }
   }
@@ -110,12 +110,14 @@ chaine chaine_code(chaine ch, chaine mot, bool* gagne)
 void motus_jeu(motus m)
 {
   bool gagne = false;
-  int numero = 0;
+  unsigned int numero = 0;
   chaine pro;
 
-  while (((unsigned)++numero <= m->nb_essai) && !gagne) {
+  while ((++numero <= m->nb_essai) && !gagne) {
     motus_afficher(m, numero, gagne);
     pro = chaine_lire(stdin, m->t_mot);
+    char c;
+    while (c = fgetc(stdin), c != '\n'); // Suppression du caractère '/n'
     chaine_concatener(m->propositions, pro);
     chaine_concatener(m->resultats, chaine_code(pro, m->mot, &gagne));
   }
