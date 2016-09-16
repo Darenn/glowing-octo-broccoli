@@ -112,14 +112,21 @@ void motus_jeu(motus m)
   bool gagne = false;
   unsigned int numero = 0;
   chaine pro;
+  chaine code;
   char c;
 
   while ((++numero <= m->nb_essai) && !gagne) {
     motus_afficher(m, numero, gagne);
-    pro = chaine_lire(stdin, m->t_mot);
-    while (c = fgetc(stdin), c != '\n'); // Suppression du caractère '/n'
+
+    pro = chaine_lire(stdin, m->t_mot);      // Lecture
+    while (c = fgetc(stdin), c != '\n');     // Suppression des caractères supplémentaires (ex: '/n')
+    code = chaine_code(pro, m->mot, &gagne); // Création du code
+    // Concatenations
     chaine_concatener(m->propositions, pro);
-    chaine_concatener(m->resultats, chaine_code(pro, m->mot, &gagne));
+    chaine_concatener(m->resultats, code);
+    // Destruction
+    chaine_detruire(&pro);
+    chaine_detruire(&code);
   }
   motus_afficher(m, numero, gagne);
 }
