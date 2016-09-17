@@ -9,19 +9,20 @@
 #define CHAR_EN_ATTENTE '*'
 
 #define clrscr() printf("\033[H\033[2J")
-#define couleur(param) printf("\033[%sm",param)
+#define couleur(param) printf("\033[%sm", param)
 
-typedef struct motus_struct* motus;
+typedef struct motus_struct *motus;
 
 // Pour créer le jeu
-motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char* mot);
+motus motus_creer(unsigned int _t_mot, unsigned int _nb_essai, char *mot);
 // Pour détruire correctement les allocations
-void motus_detruire(motus* m);
+void motus_detruire(motus *m);
 // fonction déjà écrite pour afficher le jeu
 void motus_afficher(motus m, unsigned int numero, bool gagne);
-// à écrire : renvoie la chaine correspondant au codage proposé lorsqu'on compare une proposition ch avec le mot recherché mot
+// à écrire : renvoie la chaine correspondant au codage proposé lorsqu'on
+// compare une proposition ch avec le mot recherché mot
 // cf exemples dans l'énoncé.
-chaine chaine_code(chaine ch, chaine mot, bool* gagne);
+chaine chaine_code(chaine ch, chaine mot, bool *gagne);
 // Déroulement du jeu
 void motus_jeu(motus m);
 
