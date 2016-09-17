@@ -113,13 +113,12 @@ void motus_jeu(motus m)
   unsigned int numero = 0; // Essai courant
   chaine pro;              // Proposition du joueur
   chaine code;             // Code de test
-  char c;                  // Permet la suppression des caractères restant dans stdin
 
   while ((++numero <= m->nb_essai) && !gagne) { // Tant qu'il reste des essai et que le joueur n'a pas gagné
     motus_afficher(m, numero, gagne);           // On affiche le jeu
 
     pro = chaine_lire(stdin, m->t_mot);         // Lecture de la proposition
-    while (c = fgetc(stdin), c != '\n');        // Suppression des caractères supplémentaires (ex: '/n')
+    while (fgetc(stdin) != '\n');               // Suppression des caractères supplémentaires (ex: '/n')
     code = chaine_code(pro, m->mot, &gagne);    // Création du code
     // Ajout de la proposition et du code
     chaine_concatener(m->propositions, pro);
